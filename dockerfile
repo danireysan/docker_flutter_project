@@ -1,17 +1,21 @@
 # Use an official Dart runtime as a parent image
-    FROM google/dart:latest
+FROM growerp/flutter-sdk-image:latest
+# Copy the current directory contents into the container
+# Create app directory
+WORKDIR /app
 
-    # Set the working directory in the container
-    WORKDIR /usr/src/app
+# Install dependencies  
+COPY pubspec.yaml .
+RUN flutter pub get
 
-    # Copy the current directory contents into the container
-    COPY . .
+# Give permission to user  
+USER root
 
-    # Get the Flutter SDK
-    RUN git clone https://github.com/flutter/flutter.git
-    ENV PATH="$PATH:`pwd`/flutter/bin"
+# Copy source code
+COPY . .
 
-    # Get dependencies for the Flutter project
-    RUN flutter pub get
+# Build app
+RUN flutter build apk
 
-    # Build the Flutter app for web
+# Default command 
+CMD ["flutter", "run", "-d", "emulator-5554"]
