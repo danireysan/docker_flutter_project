@@ -12,10 +12,12 @@ RUN flutter pub get
 USER root
 
 # Copy source code
-COPY . .
+COPY . .  
 
-# Build app
-RUN flutter build apk
+ENV PORT=5005   
+ENV DEVICE_NAME=emulator-5554
+
+EXPOSE 5005
 
 # Default command 
-CMD ["flutter", "run", "-d", "emulator-5554"]
+CMD ["flutter", "run"]
